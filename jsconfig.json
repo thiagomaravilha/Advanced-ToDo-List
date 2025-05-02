@@ -1,0 +1,69 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "allowJs": true,
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "/*": [
+        "./*"
+      ],
+      "meteor/mongo": [
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/local_collection_driver.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/collection/collection.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/asynchronous_cursor.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/doc_fetcher.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/mongo_common.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/mongo_connection.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/mongo_driver.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/mongo_utils.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/oplog_observe_driver.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/collection/collection_utils.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/collection/methods_async.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/collection/methods_index.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/collection/methods_replication.js",
+        "/home/thiago/.meteor/packages/mongo/2.1.1/web.browser/collection/methods_sync.js"
+      ],
+      "meteor/reactive-var": [
+        "/home/thiago/.meteor/packages/reactive-var/1.0.13/web.browser/reactive-var.js"
+      ],
+      "meteor/es5-shim": [
+        "/home/thiago/.meteor/packages/es5-shim/4.8.1/web.browser/client.js",
+        "/home/thiago/.meteor/packages/es5-shim/4.8.1/web.browser/console.js",
+        "/home/thiago/.meteor/packages/es5-shim/4.8.1/web.browser/cordova.js",
+        "/home/thiago/.meteor/packages/es5-shim/4.8.1/web.browser/export_globals.js",
+        "/home/thiago/.meteor/packages/es5-shim/4.8.1/web.browser/import_globals.js"
+      ],
+      "meteor/ecmascript": [
+        "/home/thiago/.meteor/packages/ecmascript/0.16.10/web.browser/ecmascript.js"
+      ],
+      "meteor/shell-server": [
+        "/home/thiago/.meteor/packages/shell-server/0.6.1/web.browser/main.js",
+        "/home/thiago/.meteor/packages/shell-server/0.6.1/web.browser/shell-server.js"
+      ],
+      "meteor/hot-module-replacement": [
+        "/home/thiago/.meteor/packages/hot-module-replacement/0.5.4/web.browser/hot-api.js",
+        "/home/thiago/.meteor/packages/hot-module-replacement/0.5.4/web.browser/client.js",
+        "/home/thiago/.meteor/packages/hot-module-replacement/0.5.4/web.browser/server.js"
+      ],
+      "meteor/react-meteor-data": [
+        "/home/thiago/.meteor/packages/react-meteor-data/3.0.3/web.browser/index.js",
+        "/home/thiago/.meteor/packages/react-meteor-data/3.0.3/web.browser/suspense/index.js"
+      ],
+      "meteor/accounts-password": [
+        "/home/thiago/.meteor/packages/accounts-password/3.0.3/web.browser/password_client.js",
+        "/home/thiago/.meteor/packages/accounts-password/3.0.3/web.browser/email_templates.js",
+        "/home/thiago/.meteor/packages/accounts-password/3.0.3/web.browser/password_server.js"
+      ]
+    }
+  },
+  "typeAcquisition": {
+    "include": [
+      "meteor"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    ".meteor"
+  ]
+}

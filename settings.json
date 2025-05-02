@@ -1,0 +1,7 @@
+{
+    "galaxy.meteor.com": {
+      "env": {
+        "MONGO_URL": "mongodb+srv://thiago:senha@cluster0.iqojd4d.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      }
+    }
+  }
