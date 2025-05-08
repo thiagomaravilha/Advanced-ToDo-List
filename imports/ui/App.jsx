@@ -3,13 +3,17 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { useTracker, useSubscribe } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { TasksCollection } from '/imports/api/TasksCollection';
-import { Task } from './Task';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
 import { WelcomeScreen } from './WelcomeScreen';
 
 export const App = () => {
-  const isLoading = useSubscribe("tasks");
+  // Assinatura para usuários
+  const isUsersLoading = useSubscribe("users");
+  
+  // Assinatura para tarefas
+  const isTasksLoading = useSubscribe("tasks");
+  
   const user = useTracker(() => Meteor.user());
   const [hideCompleted, setHideCompleted] = useState(false);
 
@@ -37,7 +41,7 @@ export const App = () => {
 
   const pendingTasksTitle = pendingTasksCount ? ` (${pendingTasksCount})` : '';
 
-  if (isLoading()) {
+  if (isUsersLoading() || isTasksLoading()) {
     return <div>Loading...</div>;
   }
 
@@ -62,24 +66,18 @@ export const App = () => {
                   <Fragment>
                     <div className="user" onClick={logout}>
                       <span className="username">{user.username}</span>
-                      <span className="logout-text">🔒 Sair</span>
+                      <span className="logout-text">🔓 Sair</span>
                     </div>
-                    <TaskForm />
+                    <TaskForm
+                      tasks={tasks}
+                      onCheckboxClick={handleToggleChecked}
+                      onDeleteClick={handleDelete}
+                    />
                     <div className="filter">
                       <button onClick={() => setHideCompleted(!hideCompleted)}>
                         {hideCompleted ? 'Show All' : 'Hide Completed'}
                       </button>
                     </div>
-                    <ul className="tasks">
-                      {tasks.map((task) => (
-                        <Task
-                          key={task._id}
-                          task={task}
-                          onCheckboxClick={handleToggleChecked}
-                          onDeleteClick={handleDelete}
-                        />
-                      ))}
-                    </ul>
                   </Fragment>
                 </div>
               </div>

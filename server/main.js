@@ -5,24 +5,36 @@ import { Accounts } from 'meteor/accounts-base';
 import "../imports/api/TasksPublications"; 
 import "../imports/api/tasksMethods";
 
-
-
-const insertTask = (taskText) => TasksCollection.insertAsync({ text: taskText });
-
-
 const SEED_USERNAME = 'thiago';
 const SEED_PASSWORD = 'password';
 
+const insertTask = async (taskText, user) => {
+  await TasksCollection.insertAsync({
+    text: taskText,
+    userId: user._id, // Associar tarefa ao usuário
+    createdAt: new Date(), // Adicionar timestamp
+  });
+};
+
+Meteor.publish("users", function () {
+  return Meteor.users.find({}, { fields: { username: 1 } }); // Publica apenas o campo username
+});
 
 Meteor.startup(async () => {
+  console.log("Server starting...");
+
+  // Criar usuário seed se não existir
   if (!(await Accounts.findUserByUsername(SEED_USERNAME))) {
     await Accounts.createUser({
       username: SEED_USERNAME,
       password: SEED_PASSWORD,
     });
+    console.log(`User created: ${SEED_USERNAME}`);
   }
 
+  // Popular tarefas seed se não existirem
   if ((await TasksCollection.find().countAsync()) === 0) {
+    const user = await Accounts.findUserByUsername(SEED_USERNAME);
     [
       "First Task",
       "Second Task",
@@ -31,8 +43,9 @@ Meteor.startup(async () => {
       "Fifth Task",
       "Sixth Task",
       "Seventh Task",
-    ].forEach(insertTask);
+    ].forEach((taskText) => insertTask(taskText, user));
+    console.log("Tasks inserted.");
+  } else {
+    console.log("Tasks already exist.");
   }
-
-
 });

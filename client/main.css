@@ -77,21 +77,22 @@ body {
     margin-right: 1em;
   }
   
-  .task-form {
-    display: flex;
-    margin: 16px;
-  }
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
   
-  .task-form > input {
-    flex-grow: 1;
-    box-sizing: border-box;
-    padding: 10px 6px;
-    background: transparent;
-    border: 1px solid #aaa;
-    width: 100%;
-    font-size: 1em;
-    margin-right: 16px;
-  }
+.task-form > input {
+  flex-grow: 1;
+  box-sizing: border-box;
+  padding: 10px 6px;
+  background: transparent;
+  border: 1px solid #aaa;
+  width: 100%;
+  font-size: 1em;
+  margin-right: 16px;
+}
   
   .task-form > input:focus {
     outline: 0;
@@ -286,4 +287,29 @@ body {
 .welcome-screen button:hover {
   background-color: #4180ab;
   transform: scale(1.05);
+}
+
+/* Contêiner para alinhar o texto e os botões */
+.task-actions {
+  display: flex;
+  justify-content: space-between; /* Botões em extremidades opostas */
+  align-items: center; /* Centraliza verticalmente os itens */
+  width: 100%; /* Garante que o espaço seja usado corretamente */
+}
+
+/* Botão de concluir à esquerda */
+.task-actions .checkbox-btn {
+  margin-right: 16px; /* Espaçamento entre o botão e o texto */
+}
+
+/* Texto da tarefa centralizado */
+.task-actions .task-text {
+  flex-grow: 1; /* Faz o texto ocupar o espaço disponível */
+  text-align: left; /* Alinha o texto à esquerda */
+  padding-right: 16px; /* Adiciona espaço entre o texto e o botão de deletar */
+}
+
+/* Botão de deletar à direita */
+.task-actions .delete-btn {
+  margin-left: auto; /* Empurra o botão para a extrema direita */
 }
