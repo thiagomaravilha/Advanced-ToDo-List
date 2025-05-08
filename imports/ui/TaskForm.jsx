@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TasksCollection } from "/imports/api/TasksCollection";
 
 export const TaskForm = () => {
+  
   const [text, setText] = useState("");
 
   const handleSubmit = async (e) => {
@@ -29,4 +30,5 @@ export const TaskForm = () => {
       <button type="submit">Add Task</button>
     </form>
   );
+  
 };

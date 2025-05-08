@@ -1,25 +1,21 @@
-import { Meteor } from 'meteor/meteor';
 import React, { Fragment, useState } from 'react';
-import { useTracker, useSubscribe } from "meteor/react-meteor-data";
-import { TasksCollection } from "/imports/api/TasksCollection";
-import { Task } from "./Task"; 
-import { TaskForm } from "./TaskForm";  
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { useTracker, useSubscribe } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import { TasksCollection } from '/imports/api/TasksCollection';
+import { Task } from './Task';
+import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
+import { WelcomeScreen } from './WelcomeScreen';
 
 export const App = () => {
   const isLoading = useSubscribe("tasks");
-
   const user = useTracker(() => Meteor.user());
-
   const [hideCompleted, setHideCompleted] = useState(false);
 
   const hideCompletedFilter = { isChecked: { $ne: true } };
-
   const tasks = useTracker(() => {
-    if (!user) {
-      return [];
-    }
-
+    if (!user) return [];
     return TasksCollection.find(
       hideCompleted ? hideCompletedFilter : {},
       { sort: { createdAt: -1 } }
@@ -27,10 +23,7 @@ export const App = () => {
   });
 
   const pendingTasksCount = useTracker(() => {
-    if (!user) {
-      return 0;
-    }
-
+    if (!user) return 0;
     return TasksCollection.find({ isChecked: { $ne: true } }).count();
   });
 
@@ -42,51 +35,60 @@ export const App = () => {
 
   const logout = () => Meteor.logout();
 
-
   const pendingTasksTitle = pendingTasksCount ? ` (${pendingTasksCount})` : '';
 
-  
   if (isLoading()) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="app">
-      <header>
-        <div className="app-bar">
-          <div className="app-header">
-            <h1>📝️ To Do List{pendingTasksTitle}</h1>
-          </div>
-        </div>
-      </header>
-      <div className="main">
-        {user ? (
-          <Fragment>
-            <div className="user" onClick={logout}>
-              {user.username} 🚪
-            </div>
-            <TaskForm />
-            <div className="filter">
-              <button onClick={() => setHideCompleted(!hideCompleted)}>
-                {hideCompleted ? 'Show All' : 'Hide Completed'}
-              </button>
-            </div>
-
-            <ul className="tasks">
-              {tasks.map((task) => (
-                <Task
-                  key={task._id}
-                  task={task}
-                  onCheckboxClick={handleToggleChecked}
-                  onDeleteClick={handleDelete}
-                />
-              ))}
-            </ul>
-          </Fragment>
-        ) : (
-          <LoginForm />
-        )}
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={!user ? <LoginForm /> : <Navigate to="/welcome" />} />
+        <Route path="/welcome" element={user ? <WelcomeScreen /> : <Navigate to="/" />} />
+        <Route
+          path="/tasks"
+          element={
+            user ? (
+              <div className="app">
+                <header>
+                  <div className="app-bar">
+                    <div className="app-header">
+                      <h1>📝 To Do List{pendingTasksTitle}</h1>
+                    </div>
+                  </div>
+                </header>
+                <div className="main">
+                  <Fragment>
+                    <div className="user" onClick={logout}>
+                      <span className="username">{user.username}</span>
+                      <span className="logout-text">🔒 Sair</span>
+                    </div>
+                    <TaskForm />
+                    <div className="filter">
+                      <button onClick={() => setHideCompleted(!hideCompleted)}>
+                        {hideCompleted ? 'Show All' : 'Hide Completed'}
+                      </button>
+                    </div>
+                    <ul className="tasks">
+                      {tasks.map((task) => (
+                        <Task
+                          key={task._id}
+                          task={task}
+                          onCheckboxClick={handleToggleChecked}
+                          onDeleteClick={handleDelete}
+                        />
+                      ))}
+                    </ul>
+                  </Fragment>
+                </div>
+              </div>
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+      </Routes>
+    </Router>
   );
 };
