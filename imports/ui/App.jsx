@@ -6,6 +6,7 @@ import { TasksCollection } from '/imports/api/TasksCollection';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
 import { WelcomeScreen } from './WelcomeScreen';
+import { EditTask } from './EditTask';
 
 export const App = () => {
   // Assinatura para usuários
@@ -84,6 +85,12 @@ export const App = () => {
             ) : (
               <Navigate to="/" />
             )
+          }
+        />
+        <Route
+          path="/tasks/edit/:id"
+          element={
+            user ? <EditTask /> : <Navigate to="/" />
           }
         />
       </Routes>

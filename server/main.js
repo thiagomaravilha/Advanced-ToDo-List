@@ -11,8 +11,8 @@ const SEED_PASSWORD = 'password';
 const insertTask = async (taskText, user) => {
   await TasksCollection.insertAsync({
     text: taskText,
-    userId: user._id, // Associar tarefa ao usuário
-    createdAt: new Date(), // Adicionar timestamp
+    userId: user._id, 
+    createdAt: new Date(), 
   });
 };
 

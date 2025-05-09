@@ -251,7 +251,6 @@ body {
   background-color: #31678a;
 }
 
-/* Tela de Boas-Vindas */
 .welcome-screen {
   display: flex;
   flex-direction: column;
@@ -289,27 +288,24 @@ body {
   transform: scale(1.05);
 }
 
-/* Contêiner para alinhar o texto e os botões */
+
 .task-actions {
   display: flex;
-  justify-content: space-between; /* Botões em extremidades opostas */
-  align-items: center; /* Centraliza verticalmente os itens */
-  width: 100%; /* Garante que o espaço seja usado corretamente */
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
 }
 
-/* Botão de concluir à esquerda */
 .task-actions .checkbox-btn {
-  margin-right: 16px; /* Espaçamento entre o botão e o texto */
+  margin-right: 16px;
 }
 
-/* Texto da tarefa centralizado */
 .task-actions .task-text {
-  flex-grow: 1; /* Faz o texto ocupar o espaço disponível */
-  text-align: left; /* Alinha o texto à esquerda */
-  padding-right: 16px; /* Adiciona espaço entre o texto e o botão de deletar */
+  flex-grow: 1; 
+  text-align: left; 
+  padding-right: 16px; 
 }
 
-/* Botão de deletar à direita */
 .task-actions .delete-btn {
-  margin-left: auto; /* Empurra o botão para a extrema direita */
+  margin-left: auto;
 }

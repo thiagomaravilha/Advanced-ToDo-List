@@ -19,4 +19,10 @@ Meteor.methods({
     return TasksCollection.removeAsync(_id);
   },
 
+  "tasks.update"({ _id, name, description, status }) {
+  return TasksCollection.updateAsync(_id, {
+    $set: { text: name, description, status },
+  });
+},
+
 });

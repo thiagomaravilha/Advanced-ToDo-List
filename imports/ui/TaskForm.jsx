@@ -1,13 +1,16 @@
 import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
-
 import React, { useState } from "react";
 import { List, ListItem, IconButton, TextField, Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate } from "react-router-dom";
+
 
 export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
   const [text, setText] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,6 +67,15 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
                   Created by: {getUserName(task.userId)}
                 </div>
               </div>
+
+              {/* Botão de Editar */}
+              <IconButton
+                className="edit-btn"
+                onClick={() => navigate(`/tasks/edit/${task._id}`)}
+                aria-label="edit"
+              >
+                <EditIcon color="primary" />
+              </IconButton>
 
               {/* Botão de Deletar */}
               <IconButton
