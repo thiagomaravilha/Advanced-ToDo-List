@@ -17,13 +17,12 @@ const insertTask = async (taskText, user) => {
 };
 
 Meteor.publish("users", function () {
-  return Meteor.users.find({}, { fields: { username: 1 } }); // Publica apenas o campo username
+  return Meteor.users.find({}, { fields: { username: 1 } });
 });
 
 Meteor.startup(async () => {
   console.log("Server starting...");
 
-  // Criar usuário seed se não existir
   if (!(await Accounts.findUserByUsername(SEED_USERNAME))) {
     await Accounts.createUser({
       username: SEED_USERNAME,
@@ -32,7 +31,6 @@ Meteor.startup(async () => {
     console.log(`User created: ${SEED_USERNAME}`);
   }
 
-  // Popular tarefas seed se não existirem
   if ((await TasksCollection.find().countAsync()) === 0) {
     const user = await Accounts.findUserByUsername(SEED_USERNAME);
     [

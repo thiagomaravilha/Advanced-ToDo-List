@@ -94,7 +94,7 @@ export const EditTask = () => {
 
             <Button
               variant="text"
-              onClick={() => navigate("/tasks")}
+              onClick={() => window.location.href = "/tasks"}
               sx={{ ml: "auto" }}
             >
               Voltar

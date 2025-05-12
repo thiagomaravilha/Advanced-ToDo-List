@@ -9,16 +9,14 @@ import { WelcomeScreen } from './WelcomeScreen';
 import { EditTask } from './EditTask';
 
 export const App = () => {
-  // Assinatura para usuários
   const isUsersLoading = useSubscribe("users");
   
-  // Assinatura para tarefas
   const isTasksLoading = useSubscribe("tasks");
   
   const user = useTracker(() => Meteor.user());
   const [hideCompleted, setHideCompleted] = useState(false);
 
-  const hideCompletedFilter = { isChecked: { $ne: true } };
+  const hideCompletedFilter = { status: { $ne: "Concluída" } };
   const tasks = useTracker(() => {
     if (!user) return [];
     return TasksCollection.find(

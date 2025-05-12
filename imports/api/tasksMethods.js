@@ -6,6 +6,7 @@ Meteor.methods({
     return TasksCollection.insertAsync({
       ...doc,
       userId: this.userId,
+      status: 'Cadastrada',
     });
   },
 
