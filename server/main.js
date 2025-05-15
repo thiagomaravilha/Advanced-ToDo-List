@@ -31,19 +31,19 @@ Meteor.startup(async () => {
     console.log(`User created: ${SEED_USERNAME}`);
   }
 
-  if ((await TasksCollection.find().countAsync()) === 0) {
-    const user = await Accounts.findUserByUsername(SEED_USERNAME);
-    [
-      "First Task",
-      "Second Task",
-      "Third Task",
-      "Fourth Task",
-      "Fifth Task",
-      "Sixth Task",
-      "Seventh Task",
-    ].forEach((taskText) => insertTask(taskText, user));
-    console.log("Tasks inserted.");
-  } else {
-    console.log("Tasks already exist.");
-  }
+  // if ((await TasksCollection.find().countAsync()) === 0) {
+  //   const user = await Accounts.findUserByUsername(SEED_USERNAME);
+  //   [
+  //     "First Task",
+  //     "Second Task",
+  //     "Third Task",
+  //     "Fourth Task",
+  //     "Fifth Task",
+  //     "Sixth Task",
+  //     "Seventh Task",
+  //   ].forEach((taskText) => insertTask(taskText, user));
+  //   console.log("Tasks inserted.");
+  // } else {
+  //   console.log("Tasks already exist.");
+  // }
 });

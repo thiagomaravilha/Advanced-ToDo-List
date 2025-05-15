@@ -9,7 +9,7 @@ import "/client/EditTask.css";
 
 export const EditTask = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); //test sem dps
 
   useTracker(() => {
     Meteor.subscribe("tasks");
@@ -46,10 +46,21 @@ export const EditTask = () => {
       }
     });
   };
-
-  const handleStatusChange = (newStatus) => {
-    Meteor.call("tasks.update", { _id: id, name, description, status: newStatus });
+  const updateTask = async (updatedFields) => {
+    await Meteor.callAsync("tasks.update", {
+      _id: id,
+      name,
+      description,
+      status,
+      ...updatedFields,
+    });
   };
+
+
+  const handleStatusChange = async (newStatus) => {
+    setStatus(newStatus);
+    await updateTask({ status: newStatus });
+};
 
   if (!task) return <p>Carregando tarefa...</p>;
 

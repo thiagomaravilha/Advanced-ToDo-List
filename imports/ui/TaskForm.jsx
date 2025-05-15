@@ -54,13 +54,13 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
               {/* Botão de Concluído */}
               <IconButton
                 className="checkbox-btn"
-                onClick={() => {
-                  if (task.status !== "Concluída") {
-                    onCheckboxClick(task);
-                  }
-                }}
+                // onClick={() => {
+                //   if (task.status !== "Concluída") {
+                //     onCheckboxClick(task);
+                //   }
+                // }}
                 aria-label="toggle"
-                disabled={task.status === "Concluída"}
+                //disabled={task.status} 
               >
                 <CheckCircleIcon
                   sx={{
