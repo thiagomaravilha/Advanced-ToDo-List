@@ -4,9 +4,8 @@ import React, { useState } from "react";
 import { List, ListItem, IconButton, TextField, Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
-
 
 export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
   const [text, setText] = useState("");
@@ -32,6 +31,7 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
   };
 
   return (
+    
     <div>
       <form className="task-form" onSubmit={handleSubmit}>
         <TextField
@@ -54,13 +54,13 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
               {/* Botão de Concluído */}
               <IconButton
                 className="checkbox-btn"
-                // onClick={() => {
-                //   if (task.status !== "Concluída") {
-                //     onCheckboxClick(task);
-                //   }
-                // }}
+                onClick={() => {
+                  if (task.status !== "Concluída") {
+                    onCheckboxClick(task);
+                  }
+                }}
                 aria-label="toggle"
-                //disabled={task.status} 
+                disabled={task.status === "Concluída"}
               >
                 <CheckCircleIcon
                   sx={{
@@ -68,12 +68,11 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
                       task.status === "Concluída"
                         ? "green"
                         : task.status === "Em Andamento"
-                          ? "blue"
-                          : "gray",
+                        ? "blue"
+                        : "gray",
                   }}
                 />
               </IconButton>
-
 
               {/* Texto da Tarefa */}
               <div className="task-text">
