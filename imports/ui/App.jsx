@@ -33,8 +33,22 @@ export const App = () => {
   const handleToggleChecked = ({ _id, isChecked }) =>
     Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
 
-  const handleDelete = ({ _id }) =>
-    Meteor.callAsync("tasks.delete", { _id });
+  const handleDelete = async ({ _id }) => {
+    const confirmDelete = window.confirm("Tem certeza que deseja excluir esta tarefa?");
+    if (!confirmDelete) return;
+
+    try {
+      await Meteor.callAsync("tasks.delete", { _id });
+    } catch (error) {
+      if (error?.error === "not-authorized") {
+        alert("Você não tem permissão para excluir esta tarefa.");
+      } else {
+        alert(error.reason || "Erro ao excluir a tarefa.");
+      }
+    }
+  };
+
+
 
   const logout = () => Meteor.logout();
 

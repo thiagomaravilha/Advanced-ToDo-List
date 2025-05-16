@@ -8,13 +8,13 @@ import "../imports/api/tasksMethods";
 const SEED_USERNAME = 'thiago';
 const SEED_PASSWORD = 'password';
 
-const insertTask = async (taskText, user) => {
-  await TasksCollection.insertAsync({
-    text: taskText,
-    userId: user._id, 
-    createdAt: new Date(), 
-  });
-};
+// const insertTask = async (taskText, user) => {
+//   await TasksCollection.insertAsync({
+//     text: taskText,
+//     userId: user._id, 
+//     createdAt: new Date(), 
+//   });
+// };
 
 Meteor.publish("users", function () {
   return Meteor.users.find({}, { fields: { username: 1 } });

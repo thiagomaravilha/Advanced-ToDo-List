@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import { TasksCollection } from "./TasksCollection";
 
 Meteor.methods({
-  // Inserir tarefa
+
   "tasks.insert": async function (doc) {
     if (!this.userId) {
       throw new Meteor.Error("not-authorized", "Você precisa estar autenticado para criar uma tarefa.");
@@ -16,7 +16,7 @@ Meteor.methods({
     });
   },
 
-  // Alternar checkbox
+  
   "tasks.toggleChecked": async function ({ _id, isChecked }) {
     if (!this.userId) throw new Meteor.Error("not-authorized");
 
@@ -29,7 +29,7 @@ Meteor.methods({
     });
   },
 
-  // Excluir tarefa
+  
   "tasks.delete": async function ({ _id }) {
     if (!this.userId) throw new Meteor.Error("not-authorized");
 
@@ -40,7 +40,7 @@ Meteor.methods({
     return TasksCollection.removeAsync(_id);
   },
 
-  // Atualizar tarefa (nome, descrição, status)
+  
   "tasks.update": async function ({ _id, name, description, status }) {
     if (!this.userId) throw new Meteor.Error("not-authorized");
 
