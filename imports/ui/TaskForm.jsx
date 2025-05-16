@@ -49,10 +49,10 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
           fullWidth
           value={text}
           onChange={(e) => setText(e.target.value)}
-          style={{ marginBottom: "12px" }}
+          className="text-field"
         />
 
-        <div style={{ marginBottom: "12px" }}>
+        <div className="checkbox-container">
           <label>
             <input
               type="checkbox"
@@ -68,11 +68,10 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
         </Button>
       </form>
 
-      <List style={{ marginTop: "16px" }}>
+      <List className="task-list">
         {tasks.map((task) => (
-          <ListItem key={task._id}>
-            <div className="task-actions" style={{ display: "flex", alignItems: "center", width: "100%" }}>
-              {/* Botão de Concluir */}
+          <ListItem key={task._id} className="task-item">
+            <div className="task-actions">
               <IconButton
                 className="checkbox-btn"
                 onClick={() => {
@@ -84,29 +83,26 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
                 disabled={task.status === "Concluída"}
               >
                 <CheckCircleIcon
-                  sx={{
-                    color:
-                      task.status === "Concluída"
-                        ? "green"
-                        : task.status === "Em Andamento"
-                        ? "blue"
-                        : "gray",
-                  }}
+                  className={`status-icon ${
+                    task.status === "Concluída" ? "green" :
+                    task.status === "Em Andamento" ? "blue" : "gray"
+                  }`}
                 />
               </IconButton>
 
-              {/* Texto da tarefa */}
-              <div className="task-text" style={{ flexGrow: 1 }}>
+              <div className="task-text">
                 {task.text}
-                <div className="task-creator" style={{ fontSize: "0.8rem", color: "#555" }}>
+                <div className="task-creator">
                   Criada por: {getUserName(task.userId)}
                   {task.isPrivate && (
-                    <LockIcon fontSize="small" style={{ marginLeft: 6, verticalAlign: "middle" }} titleAccess="Tarefa pessoal" />
+                    <LockIcon
+                      className="lock-icon"
+                      titleAccess="Tarefa pessoal"
+                    />
                   )}
                 </div>
               </div>
 
-              {/* Botão de Editar */}
               <IconButton
                 className="edit-btn"
                 onClick={() => navigate(`/tasks/edit/${task._id}`)}
@@ -115,7 +111,6 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
                 <EditIcon color="primary" />
               </IconButton>
 
-              {/* Botão de Deletar */}
               <IconButton
                 className="delete-btn"
                 onClick={() => onDeleteClick(task)}
