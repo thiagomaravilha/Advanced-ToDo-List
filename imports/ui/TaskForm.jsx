@@ -1,57 +1,78 @@
 import { useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
 import React, { useState } from "react";
-import { List, ListItem, IconButton, TextField, Button } from "@mui/material";
+import {
+  List,
+  ListItem,
+  IconButton,
+  TextField,
+  Button,
+} from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate } from "react-router-dom";
 
 export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
   const [text, setText] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!text) return;
+    if (!text.trim()) return;
 
     await Meteor.callAsync("tasks.insert", {
       text: text.trim(),
       createdAt: new Date(),
       userId: Meteor.userId(),
+      isPrivate,
     });
 
     setText("");
+    setIsPrivate(false);
   };
 
   const getUserName = (userId) => {
     const user = Meteor.users.findOne(userId);
-    return user ? user.username : "Unknown User";
+    return user ? user.username : "Usuário Desconhecido";
   };
 
   return (
-    
     <div>
       <form className="task-form" onSubmit={handleSubmit}>
         <TextField
-          label="Type to add new tasks"
+          label="Nova tarefa"
           variant="outlined"
           fullWidth
           value={text}
           onChange={(e) => setText(e.target.value)}
-          style={{ marginBottom: "16px" }}
+          style={{ marginBottom: "12px" }}
         />
+
+        <div style={{ marginBottom: "12px" }}>
+          <label>
+            <input
+              type="checkbox"
+              checked={isPrivate}
+              onChange={(e) => setIsPrivate(e.target.checked)}
+            />
+            {" "}Tarefa pessoal (visível só para você)
+          </label>
+        </div>
+
         <Button type="submit" variant="contained" color="primary" fullWidth>
-          Add Task
+          Adicionar Tarefa
         </Button>
       </form>
 
       <List style={{ marginTop: "16px" }}>
         {tasks.map((task) => (
           <ListItem key={task._id}>
-            <div className="task-actions">
-              {/* Botão de Concluído */}
+            <div className="task-actions" style={{ display: "flex", alignItems: "center", width: "100%" }}>
+              {/* Botão de Concluir */}
               <IconButton
                 className="checkbox-btn"
                 onClick={() => {
@@ -74,11 +95,14 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
                 />
               </IconButton>
 
-              {/* Texto da Tarefa */}
-              <div className="task-text">
+              {/* Texto da tarefa */}
+              <div className="task-text" style={{ flexGrow: 1 }}>
                 {task.text}
-                <div className="task-creator">
-                  Created by: {getUserName(task.userId)}
+                <div className="task-creator" style={{ fontSize: "0.8rem", color: "#555" }}>
+                  Criada por: {getUserName(task.userId)}
+                  {task.isPrivate && (
+                    <LockIcon fontSize="small" style={{ marginLeft: 6, verticalAlign: "middle" }} titleAccess="Tarefa pessoal" />
+                  )}
                 </div>
               </div>
 
