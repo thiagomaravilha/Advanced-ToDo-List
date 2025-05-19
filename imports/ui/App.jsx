@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useTracker, useSubscribe } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
@@ -7,14 +7,12 @@ import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
 import { WelcomeScreen } from './WelcomeScreen';
 import { EditTask } from './EditTask';
-
 import UserProfile from './UserProfile';
+import { AppDrawer } from './AppDrawer';
 
 export const App = () => {
   const isUsersLoading = useSubscribe("users");
-  
   const isTasksLoading = useSubscribe("tasks");
-  
   const user = useTracker(() => Meteor.user());
   const [hideCompleted, setHideCompleted] = useState(false);
 
@@ -50,64 +48,46 @@ export const App = () => {
     }
   };
 
-
-
   const logout = () => Meteor.logout();
-
-  const pendingTasksTitle = pendingTasksCount ? ` (${pendingTasksCount})` : '';
 
   if (isUsersLoading() || isTasksLoading()) {
     return <div>Loading...</div>;
   }
 
+  // Rotas protegidas dentro do Drawer
+  const AuthenticatedRoutes = () => (
+    <AppDrawer>
+      <Routes>
+        <Route path="/welcome" element={<WelcomeScreen />} />
+        <Route
+          path="/tasks"
+          element={
+            <div className="main">
+              <TaskForm
+                tasks={tasks}
+                onCheckboxClick={handleToggleChecked}
+                onDeleteClick={handleDelete}
+              />
+              <div className="filter">
+                <button onClick={() => setHideCompleted(!hideCompleted)}>
+                  {hideCompleted ? 'Show All' : 'Hide Completed'}
+                </button>
+              </div>
+            </div>
+          }
+        />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/tasks/edit/:id" element={<EditTask />} />
+        <Route path="*" element={<Navigate to="/welcome" />} />
+      </Routes>
+    </AppDrawer>
+  );
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={!user ? <LoginForm /> : <Navigate to="/welcome" />} />
-        <Route path="/welcome" element={user ? <WelcomeScreen /> : <Navigate to="/" />} />
-        <Route path="/profile" element={user ? <UserProfile /> : <Navigate to="/" />} />
-        <Route
-          path="/tasks"
-          element={
-            user ? (
-              <div className="app">
-                <header>
-                  <div className="app-bar">
-                    <div className="app-header">
-                      <h1>📝 To Do List{pendingTasksTitle}</h1>
-                    </div>
-                  </div>
-                </header>
-                <div className="main">
-                  <Fragment>
-                    <div className="user" onClick={logout}>
-                      <span className="username">{user.username}</span>
-                      <span className="logout-text">🔓 Sair</span>
-                    </div>
-                    <TaskForm
-                      tasks={tasks}
-                      onCheckboxClick={handleToggleChecked}
-                      onDeleteClick={handleDelete}
-                    />
-                    <div className="filter">
-                      <button onClick={() => setHideCompleted(!hideCompleted)}>
-                        {hideCompleted ? 'Show All' : 'Hide Completed'}
-                      </button>
-                    </div>
-                  </Fragment>
-                </div>
-              </div>
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-        <Route
-          path="/tasks/edit/:id"
-          element={
-            user ? <EditTask /> : <Navigate to="/" />
-          }
-        />
+        <Route path="/*" element={user ? <AuthenticatedRoutes /> : <Navigate to="/" />} />
       </Routes>
     </Router>
   );

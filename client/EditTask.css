@@ -5,15 +5,16 @@
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .edit-task-container h1,
-  .edit-task-container h2 {
+    margin-top: 80px; /* espaço para o AppBar */
+}
+
+.edit-task-container h1,
+.edit-task-container h2 {
     text-align: center;
     color: #333;
-  }
-  
-  .edit-task-container button {
+}
+
+.edit-task-container button {
     background-color: #1976d2;
     color: white;
     border: none;
@@ -22,9 +23,17 @@
     cursor: pointer;
     font-size: 16px;
     margin-right: 10px;
-  }
-  
-  .edit-task-container button:hover {
+    transition: background 0.2s, transform 0.1s;
+}
+
+.edit-task-container button:hover {
     background-color: #1565c0;
-  }
-  
+    transform: scale(1.04);
+}
+
+@media (max-width: 600px) {
+    .edit-task-container {
+        padding: 8px;
+        margin-top: 70px;
+    }
+}
