@@ -5,6 +5,9 @@ import { Accounts } from 'meteor/accounts-base';
 import "../imports/api/TasksPublications"; 
 import "../imports/api/tasksMethods";
 
+import '/imports/api/userProfileMethods.js';
+import '/imports/api/userProfilePublications.js';
+
 const SEED_USERNAME = 'thiago';
 const SEED_PASSWORD = 'password';
 

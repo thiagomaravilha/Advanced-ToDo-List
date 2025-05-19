@@ -7,8 +7,9 @@ export const WelcomeScreen = () => {
   return (
     <div className="welcome-screen">
       <h1>Bem-vindo!</h1>
-      <p>Você está autenticado. Clique no botão abaixo para acessar suas tarefas.</p>
+      <p>Você está autenticado. Clique nos botões abaixo:</p>
       <button onClick={() => navigate('/tasks')}>Ver Tarefas</button>
+      <button onClick={() => navigate('/profile')}>Perfil</button>
     </div>
   );
 };

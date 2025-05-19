@@ -8,6 +8,8 @@ import { LoginForm } from './LoginForm';
 import { WelcomeScreen } from './WelcomeScreen';
 import { EditTask } from './EditTask';
 
+import UserProfile from './UserProfile';
+
 export const App = () => {
   const isUsersLoading = useSubscribe("users");
   
@@ -63,6 +65,7 @@ export const App = () => {
       <Routes>
         <Route path="/" element={!user ? <LoginForm /> : <Navigate to="/welcome" />} />
         <Route path="/welcome" element={user ? <WelcomeScreen /> : <Navigate to="/" />} />
+        <Route path="/profile" element={user ? <UserProfile /> : <Navigate to="/" />} />
         <Route
           path="/tasks"
           element={
