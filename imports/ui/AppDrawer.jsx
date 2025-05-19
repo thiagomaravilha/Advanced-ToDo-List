@@ -36,7 +36,6 @@ export const AppDrawer = ({ children }) => {
     setOpen(false);
   };
 
-  // Função de logout
   const logout = () => Meteor.logout();
 
   return (
