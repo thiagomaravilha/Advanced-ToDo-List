@@ -33,7 +33,6 @@ Meteor.methods({
         'profile.photo': data.photo,
       },
     });
-    // Atualiza o email se mudou
     if (data.email) {
       await Meteor.users.updateAsync(this.userId, { $set: { 'emails.0.address': data.email } });
     }
