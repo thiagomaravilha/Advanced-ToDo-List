@@ -360,9 +360,7 @@ header {
     }
 }
 
-/* === SEU ARQUIVO ORIGINAL INTEIRO MANTIDO COMO ESTAVA ACIMA === */
 
-/* NOVAS CLASSES PARA FILTRO DE TAREFAS */
 .task-filter-container {
     margin-top: 16px;
     display: flex;
