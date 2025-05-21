@@ -12,16 +12,18 @@ import { EditTask } from './EditTask';
 import UserProfile from './UserProfile';
 import { AppDrawer } from './AppDrawer';
 
-// Estado reativo global
+// ReactiveVars globais
 const showCompletedVar = new ReactiveVar(true);
+const searchTextVar = new ReactiveVar("");
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
 
   const showCompleted = useTracker(() => showCompletedVar.get());
+  const searchText = useTracker(() => searchTextVar.get());
 
   const isUsersLoading = useSubscribe("users");
-  const isTasksLoading = useSubscribe("tasks.filtered", showCompleted);
+  const isTasksLoading = useSubscribe("tasks.filteredWithSearch", showCompleted, searchText);
 
   const tasks = useTracker(() => {
     if (!user) return [];
@@ -51,44 +53,64 @@ export const App = () => {
     }
   };
 
-  const logout = () => Meteor.logout();
+  const AuthenticatedRoutes = () => {
+    const [localSearch, setLocalSearch] = React.useState("");
+
+    return (
+      <AppDrawer>
+        <Routes>
+          <Route path="/welcome" element={<WelcomeScreen />} />
+          <Route
+            path="/tasks"
+            element={
+              <div className="main">
+                <TaskForm
+                  tasks={tasks}
+                  onCheckboxClick={handleToggleChecked}
+                  onDeleteClick={handleDelete}
+                />
+                <div className="task-filter-container">
+                  <div className="task-filter-checkbox">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={showCompleted}
+                        onChange={() => showCompletedVar.set(!showCompleted)}
+                      />
+                      Mostrar tarefas concluídas
+                    </label>
+                  </div>
+
+                  <div className="task-search-group">
+                    <input
+                      type="text"
+                      placeholder="Buscar por nome da tarefa..."
+                      value={localSearch}
+                      onChange={(e) => setLocalSearch(e.target.value)}
+                      className="task-search-input"
+                    />
+                    <button
+                      onClick={() => searchTextVar.set(localSearch)}
+                      className="task-search-button"
+                    >
+                      Buscar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/tasks/edit/:id" element={<EditTask />} />
+          <Route path="*" element={<Navigate to="/welcome" />} />
+        </Routes>
+      </AppDrawer>
+    );
+  };
 
   if (isUsersLoading() || isTasksLoading()) {
     return <div>Loading...</div>;
   }
-
-  const AuthenticatedRoutes = () => (
-    <AppDrawer>
-      <Routes>
-        <Route path="/welcome" element={<WelcomeScreen />} />
-        <Route
-          path="/tasks"
-          element={
-            <div className="main">
-              <TaskForm
-                tasks={tasks}
-                onCheckboxClick={handleToggleChecked}
-                onDeleteClick={handleDelete}
-              />
-              <div className="filter" style={{ marginTop: "12px" }}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={showCompleted}
-                    onChange={() => showCompletedVar.set(!showCompleted)}
-                  />{" "}
-                  Mostrar tarefas concluídas
-                </label>
-              </div>
-            </div>
-          }
-        />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/tasks/edit/:id" element={<EditTask />} />
-        <Route path="*" element={<Navigate to="/welcome" />} />
-      </Routes>
-    </AppDrawer>
-  );
 
   return (
     <Router>
