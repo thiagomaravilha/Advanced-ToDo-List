@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useTracker, useSubscribe } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
+import { ReactiveVar } from 'meteor/reactive-var';
+
 import { TasksCollection } from '/imports/api/TasksCollection';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
@@ -10,19 +12,20 @@ import { EditTask } from './EditTask';
 import UserProfile from './UserProfile';
 import { AppDrawer } from './AppDrawer';
 
-export const App = () => {
-  const isUsersLoading = useSubscribe("users");
-  const isTasksLoading = useSubscribe("tasks");
-  const user = useTracker(() => Meteor.user());
-  const [hideCompleted, setHideCompleted] = useState(false);
+// Estado reativo global
+const showCompletedVar = new ReactiveVar(true);
 
-  const hideCompletedFilter = { status: { $ne: "Concluída" } };
+export const App = () => {
+  const user = useTracker(() => Meteor.user());
+
+  const showCompleted = useTracker(() => showCompletedVar.get());
+
+  const isUsersLoading = useSubscribe("users");
+  const isTasksLoading = useSubscribe("tasks.filtered", showCompleted);
+
   const tasks = useTracker(() => {
     if (!user) return [];
-    return TasksCollection.find(
-      hideCompleted ? hideCompletedFilter : {},
-      { sort: { createdAt: -1 } }
-    ).fetch();
+    return TasksCollection.find({}, { sort: { createdAt: -1 } }).fetch();
   });
 
   const pendingTasksCount = useTracker(() => {
@@ -54,7 +57,6 @@ export const App = () => {
     return <div>Loading...</div>;
   }
 
-  // Rotas protegidas dentro do Drawer
   const AuthenticatedRoutes = () => (
     <AppDrawer>
       <Routes>
@@ -68,10 +70,15 @@ export const App = () => {
                 onCheckboxClick={handleToggleChecked}
                 onDeleteClick={handleDelete}
               />
-              <div className="filter">
-                <button onClick={() => setHideCompleted(!hideCompleted)}>
-                  {hideCompleted ? 'Show All' : 'Hide Completed'}
-                </button>
+              <div className="filter" style={{ marginTop: "12px" }}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={showCompleted}
+                    onChange={() => showCompletedVar.set(!showCompleted)}
+                  />{" "}
+                  Mostrar tarefas concluídas
+                </label>
               </div>
             </div>
           }

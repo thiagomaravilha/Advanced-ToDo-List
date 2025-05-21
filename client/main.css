@@ -186,8 +186,13 @@ header {
 .filter {
     display: flex;
     justify-content: center;
+    margin-top: 12px;
 }
 
+.filter label {
+    font-size: 1em;
+    color: #333;
+}
 .filter > button {
     background-color: #62807e;
 }
