@@ -6,6 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Meteor } from 'meteor/meteor';
 import { useNavigate } from 'react-router-dom';
 import ptBR from 'date-fns/locale/pt-BR';
+import '/client/user-profile.css';
 
 const sexes = [
   { value: 'male', label: 'Masculino' },
@@ -63,9 +64,8 @@ export default function UserProfile() {
     };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="user-profile-form">
       <Stack spacing={2} alignItems="center" sx={{ maxWidth: 400, margin: 'auto', mt: 4 }}>
-        <Button variant="outlined" onClick={() => navigate("/welcome")}>Voltar</Button>
         <Avatar src={values.photo} sx={{ width: 100, height: 100 }} />
         <Button variant="contained" component="label">
           Upload Foto
@@ -73,19 +73,21 @@ export default function UserProfile() {
         </Button>
         <TextField label="Nome" value={values.name} onChange={handleChange('name')} fullWidth />
         <TextField label="Email" value={values.email} onChange={handleChange('email')} fullWidth />
-        <LocalizationProvider dateAdapter={AdapterDateFns} 
-              
-        // @ts-ignore
-        adapterLocale={ptBR}>
+
+        <LocalizationProvider
+          dateAdapter={AdapterDateFns}
+          // @ts-ignore
+          adapterLocale={ptBR}
+        >
           <DatePicker
             label="Data de Nascimento"
             value={values.birthdate}
             onChange={handleDateChange}
-            
             // @ts-ignore
             renderInput={(params) => <TextField {...params} fullWidth />}
           />
         </LocalizationProvider>
+
         <FormControl fullWidth>
           <InputLabel>Sexo</InputLabel>
           <Select value={values.sex} label="Sexo" onChange={handleChange('sex')}>
@@ -94,8 +96,18 @@ export default function UserProfile() {
             ))}
           </Select>
         </FormControl>
+
         <TextField label="Empresa" value={values.company} onChange={handleChange('company')} fullWidth />
-        <Button type="submit" variant="contained" color="primary">Salvar</Button>
+
+        
+        <div className="form-buttons">
+          <Button variant="outlined" onClick={() => navigate("/welcome")}>
+            Voltar
+          </Button>
+          <Button type="submit" variant="contained" color="primary">
+            Salvar
+          </Button>
+        </div>
       </Stack>
     </form>
   );

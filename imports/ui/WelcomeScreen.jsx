@@ -10,6 +10,7 @@ import {
   Grid,
 } from "@mui/material";
 import { Meteor } from "meteor/meteor";
+import '/client/welcome-screen.css';
 
 export const WelcomeScreen = () => {
   const navigate = useNavigate();

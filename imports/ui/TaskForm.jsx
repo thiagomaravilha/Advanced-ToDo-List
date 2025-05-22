@@ -14,6 +14,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate } from "react-router-dom";
 
+import '/client/task-form.css';
+import '/client/task-filter.css';
+
 export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
   const [text, setText] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);

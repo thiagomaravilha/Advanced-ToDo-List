@@ -1,6 +1,9 @@
 import { Meteor } from "meteor/meteor";
 import React, { useState } from "react";
 
+import { Link } from "react-router-dom";
+import '/client/login-form.css';
+
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -46,6 +49,11 @@ export const LoginForm = () => {
 
       <div>
         <button type="submit">Log In</button>
+      </div>
+      <div>
+        <Link to="/register" className="register-link">
+          Não tem uma conta? Cadastrar
+        </Link>        
       </div>
     </form>
   );

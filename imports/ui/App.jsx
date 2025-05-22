@@ -11,6 +11,8 @@ import { WelcomeScreen } from './WelcomeScreen';
 import { EditTask } from './EditTask';
 import UserProfile from './UserProfile';
 import { AppDrawer } from './AppDrawer';
+import '/client/base.css';
+import '/client/layout.css';
 
 // ReactiveVars globais
 const showCompletedVar = new ReactiveVar(true);

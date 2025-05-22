@@ -1,0 +1,58 @@
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.text-field {
+  margin-bottom: 12px;
+}
+
+.checkbox-container {
+  margin-bottom: 12px;
+}
+
+.task-list {
+  margin-top: 16px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.task-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.task-text {
+  flex-grow: 1;
+  text-align: left;
+  padding-right: 16px;
+}
+
+.checkbox-btn {
+  margin-right: 16px;
+}
+
+.delete-btn {
+  margin-left: auto;
+}
+
+.status-icon.green {
+  color: green;
+}
+.status-icon.blue {
+  color: blue;
+}
+.status-icon.gray {
+  color: gray;
+}
+.lock-icon {
+  margin-left: 6px;
+  vertical-align: middle;
+}

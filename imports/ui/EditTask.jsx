@@ -4,14 +4,12 @@ import { useTracker } from "meteor/react-meteor-data";
 import { TasksCollection } from "/imports/api/TasksCollection";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import { Meteor } from "meteor/meteor";
-
 import "/client/EditTask.css";
 
 export const EditTask = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Subscriptions
   useTracker(() => {
     Meteor.subscribe("tasks");
   }, []);
@@ -19,7 +17,6 @@ export const EditTask = () => {
   const task = useTracker(() => TasksCollection.findOne(id), [id]);
   const currentUserId = Meteor.userId();
 
-  // State
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
