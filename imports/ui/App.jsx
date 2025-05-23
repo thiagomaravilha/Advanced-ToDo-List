@@ -7,6 +7,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { TasksCollection } from '/imports/api/TasksCollection';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
+import { RegisterForm } from './RegisterForm';
 import { WelcomeScreen } from './WelcomeScreen';
 import { EditTask } from './EditTask';
 import UserProfile from './UserProfile';
@@ -97,14 +98,12 @@ export const App = () => {
                   </div>
                 </div>
 
-                
                 <TaskForm
                   tasks={tasks}
                   onCheckboxClick={handleToggleChecked}
                   onDeleteClick={handleDelete}
                 />
 
-                
                 <div className="pagination-controls">
                   <button
                     disabled={currentPage <= 1}
@@ -131,7 +130,6 @@ export const App = () => {
     );
   };
 
-
   if (isUsersLoading() || isTasksLoading()) {
     return <div>Loading...</div>;
   }
@@ -139,7 +137,10 @@ export const App = () => {
   return (
     <Router>
       <Routes>
+  
         <Route path="/" element={!user ? <LoginForm /> : <Navigate to="/welcome" />} />
+        <Route path="/register" element={!user ? <RegisterForm /> : <Navigate to="/welcome" />} />
+
         <Route path="/*" element={user ? <AuthenticatedRoutes /> : <Navigate to="/" />} />
       </Routes>
     </Router>

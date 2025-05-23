@@ -1,0 +1,87 @@
+.register-form-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #547085 0%, #a7b1bc 100%);
+}
+
+.register-form {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  padding: 32px 38px 24px 38px;
+  min-width: 350px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.register-form > div {
+  margin-bottom: 18px;
+}
+
+.register-form label {
+  display: block;
+  font-weight: bold;
+  font-size: 1.05em;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #b3b3b3;
+  box-sizing: border-box;
+  font-size: 1.09em;
+  margin-top: 2px;
+  background: #f5f7fa;
+}
+
+.register-form input:focus {
+  border-color: #4180ab;
+  outline: none;
+  background: #eaf4fb;
+}
+
+.register-form button[type="submit"] {
+  width: 100%;
+  background-color: #4180ab;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.18em;
+  padding: 12px 0;
+  margin-top: 6px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.register-form button[type="submit"]:hover {
+  background-color: #31678a;
+}
+
+.error-message {
+  color: #d32f2f;
+  font-weight: bold;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.register-link {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1em;
+  transition: color 0.2s;
+}
+
+.register-link:hover {
+  color: #1565c0;
+  text-decoration: underline;
+}

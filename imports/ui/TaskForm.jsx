@@ -25,6 +25,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import EditIcon from "@mui/icons-material/Edit";
+import LockIcon from "@mui/icons-material/Lock";
 
 import { useNavigate } from "react-router-dom";
 
@@ -111,8 +112,11 @@ export const TaskForm = ({ tasks, onCheckboxClick, onDeleteClick }) => {
                   <AccessTimeIcon fontSize="small" sx={{ mr: 0.5, verticalAlign: "middle" }} />
                   {formatTime(task.createdAt)} – {task.text}
                 </Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                   {getUserName(task.userId)}
+                  {task.isPrivate && (
+                    <LockIcon fontSize="small" sx={{ color: "#444" }} titleAccess="Tarefa pessoal" />
+                  )}
                 </Typography>
               </Box>
             </Box>

@@ -96,6 +96,7 @@ export default function UserProfile() {
             fullWidth
             value={values.name}
             onChange={handleChange('name')}
+            InputLabelProps={{ shrink: true }}
             InputProps={{
               disableUnderline: true,
               sx: { backgroundColor: "#ccc" },
@@ -110,6 +111,7 @@ export default function UserProfile() {
             fullWidth
             value={values.email}
             onChange={handleChange('email')}
+            InputLabelProps={{ shrink: true }}
             InputProps={{
               disableUnderline: true,
               sx: { backgroundColor: "#ccc" },
@@ -129,6 +131,7 @@ export default function UserProfile() {
                 textField: {
                   variant: "standard",
                   fullWidth: true,
+                  InputLabelProps: { shrink: true },
                   InputProps: {
                     disableUnderline: true,
                     sx: { backgroundColor: "#ccc" },
@@ -141,9 +144,8 @@ export default function UserProfile() {
 
         <Paper sx={{ backgroundColor: "#ccc", p: 1, mb: 2 }} variant="outlined">
           <FormControl fullWidth variant="standard">
-            <InputLabel id="sexo-label">Sexo</InputLabel>
+            <InputLabel shrink>Sexo</InputLabel>
             <Select
-              labelId="sexo-label"
               value={values.sex}
               onChange={handleChange('sex')}
               disableUnderline
@@ -165,6 +167,7 @@ export default function UserProfile() {
             fullWidth
             value={values.company}
             onChange={handleChange('company')}
+            InputLabelProps={{ shrink: true }}
             InputProps={{
               disableUnderline: true,
               sx: { backgroundColor: "#ccc" },
