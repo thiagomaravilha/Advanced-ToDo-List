@@ -54,6 +54,9 @@
         "/home/thiago/.meteor/packages/accounts-password/3.0.3/web.browser/password_client.js",
         "/home/thiago/.meteor/packages/accounts-password/3.0.3/web.browser/email_templates.js",
         "/home/thiago/.meteor/packages/accounts-password/3.0.3/web.browser/password_server.js"
+      ],
+      "meteor/tmeasday:publish-counts": [
+        "/home/thiago/.meteor/packages/tmeasday_publish-counts/0.2.1/web.browser//packages/tmeasday:publish-counts.js"
       ]
     }
   },

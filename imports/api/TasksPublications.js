@@ -1,17 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { TasksCollection } from './TasksCollection';
 
-Meteor.publish("tasks.filteredWithSearch", function (showCompleted, searchText) {
-  if (!this.userId) {
-    return this.ready();
-  }
+Meteor.publish("tasks.filteredWithSearch", function (showCompleted, searchText, page = 1) {
+  if (!this.userId) return this.ready();
 
-  const regex = new RegExp(searchText, 'i'); // Busca insensível a maiúsculas/minúsculas
-
+  const regex = new RegExp(searchText, 'i');
   const filter = {
     $or: [
-      { userId: this.userId },              // Tarefas do usuário logado
-      { isPrivate: { $ne: true } }          // Tarefas públicas
+      { userId: this.userId },
+      { isPrivate: { $ne: true } }
     ],
     text: regex
   };
@@ -20,7 +17,12 @@ Meteor.publish("tasks.filteredWithSearch", function (showCompleted, searchText) 
     filter.status = { $in: ["Cadastrada", "Em Andamento"] };
   }
 
+  const limit = 4;
+  const skip = (page - 1) * limit;
+
   return TasksCollection.find(filter, {
-    sort: { createdAt: -1 }
+    sort: { createdAt: -1 },
+    skip,
+    limit
   });
 });

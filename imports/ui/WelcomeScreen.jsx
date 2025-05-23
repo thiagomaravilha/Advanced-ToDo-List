@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTracker } from "meteor/react-meteor-data";
-import { TasksCollection } from "/imports/api/TasksCollection";
 import {
   Box,
   Typography,
   Card,
-  CardContent,
   Grid,
 } from "@mui/material";
 import { Meteor } from "meteor/meteor";
@@ -16,15 +14,19 @@ export const WelcomeScreen = () => {
   const navigate = useNavigate();
   const user = useTracker(() => Meteor.user());
 
-  const { total, concluidas, pendentes } = useTracker(() => {
-    const tasks = TasksCollection.find().fetch();
-    const total = tasks.length;
-    const concluidas = tasks.filter((t) => t.status === "Concluída").length;
-    const pendentes = tasks.filter(
-      (t) => t.status === "Cadastrada" || t.status === "Em Andamento"
-    ).length;
-    return { total, concluidas, pendentes };
-  });
+  const [stats, setStats] = useState({ total: 0, concluidas: 0, pendentes: 0 });
+
+  useEffect(() => {
+    Meteor.call("tasks.getStats", (error, result) => {
+      if (!error && result) {
+        setStats(result);
+      } else {
+        console.error("Erro ao buscar estatísticas:", error);
+      }
+    });
+  }, []);
+
+  const { total, concluidas, pendentes } = stats;
 
   const CardBox = ({ title, value, onClick }) => (
     <Card
@@ -51,7 +53,7 @@ export const WelcomeScreen = () => {
           {title}
         </Typography>
       )}
-      {value ? (
+      {value !== undefined ? (
         <Typography variant="h2" sx={{ fontWeight: "bold" }}>
           {value}
         </Typography>

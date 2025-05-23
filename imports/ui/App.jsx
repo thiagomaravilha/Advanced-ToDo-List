@@ -14,27 +14,23 @@ import { AppDrawer } from './AppDrawer';
 import '/client/base.css';
 import '/client/layout.css';
 
-// ReactiveVars globais
 const showCompletedVar = new ReactiveVar(true);
 const searchTextVar = new ReactiveVar("");
+const currentPageVar = new ReactiveVar(1);
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
 
   const showCompleted = useTracker(() => showCompletedVar.get());
   const searchText = useTracker(() => searchTextVar.get());
+  const currentPage = useTracker(() => currentPageVar.get());
 
   const isUsersLoading = useSubscribe("users");
-  const isTasksLoading = useSubscribe("tasks.filteredWithSearch", showCompleted, searchText);
+  const isTasksLoading = useSubscribe("tasks.filteredWithSearch", showCompleted, searchText, currentPage);
 
   const tasks = useTracker(() => {
     if (!user) return [];
     return TasksCollection.find({}, { sort: { createdAt: -1 } }).fetch();
-  });
-
-  const pendingTasksCount = useTracker(() => {
-    if (!user) return 0;
-    return TasksCollection.find({ isChecked: { $ne: true } }).count();
   });
 
   const handleToggleChecked = ({ _id, isChecked }) =>
@@ -71,13 +67,17 @@ export const App = () => {
                   onCheckboxClick={handleToggleChecked}
                   onDeleteClick={handleDelete}
                 />
+
                 <div className="task-filter-container">
                   <div className="task-filter-checkbox">
                     <label>
                       <input
                         type="checkbox"
                         checked={showCompleted}
-                        onChange={() => showCompletedVar.set(!showCompleted)}
+                        onChange={() => {
+                          showCompletedVar.set(!showCompleted);
+                          currentPageVar.set(1);
+                        }}
                       />
                       Mostrar tarefas concluídas
                     </label>
@@ -92,12 +92,31 @@ export const App = () => {
                       className="task-search-input"
                     />
                     <button
-                      onClick={() => searchTextVar.set(localSearch)}
+                      onClick={() => {
+                        searchTextVar.set(localSearch);
+                        currentPageVar.set(1);
+                      }}
                       className="task-search-button"
                     >
                       Buscar
                     </button>
                   </div>
+                </div>
+
+                <div className="pagination-controls">
+                  <button
+                    disabled={currentPage <= 1}
+                    onClick={() => currentPageVar.set(currentPage - 1)}
+                  >
+                    Página Anterior
+                  </button>
+                  <span>Página {currentPage}</span>
+                  <button
+                    disabled={tasks.length < 4}
+                    onClick={() => currentPageVar.set(currentPage + 1)}
+                  >
+                    Próxima Página
+                  </button>
                 </div>
               </div>
             }

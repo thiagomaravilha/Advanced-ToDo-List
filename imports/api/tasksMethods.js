@@ -16,7 +16,6 @@ Meteor.methods({
     });
   },
 
-  
   "tasks.toggleChecked": async function ({ _id, isChecked }) {
     if (!this.userId) throw new Meteor.Error("not-authorized");
 
@@ -29,7 +28,6 @@ Meteor.methods({
     });
   },
 
-  
   "tasks.delete": async function ({ _id }) {
     if (!this.userId) throw new Meteor.Error("not-authorized");
 
@@ -40,7 +38,6 @@ Meteor.methods({
     return TasksCollection.removeAsync(_id);
   },
 
-  
   "tasks.update": async function ({ _id, name, description, status }) {
     if (!this.userId) throw new Meteor.Error("not-authorized");
 
@@ -57,4 +54,44 @@ Meteor.methods({
       },
     });
   },
+
+  async "tasks.getCount"(showCompleted, searchText) {
+    if (!this.userId) throw new Meteor.Error("not-authorized");
+
+    const regex = new RegExp(searchText, 'i');
+
+    const filter = {
+      $or: [
+        { userId: this.userId },
+        { isPrivate: { $ne: true } }
+      ],
+      text: regex
+    };
+
+    if (!showCompleted) {
+      filter.status = { $in: ["Cadastrada", "Em Andamento"] };
+    }
+
+    return TasksCollection.find(filter).count();
+  },
+
+  async "tasks.getStats"() {
+    if (!this.userId) throw new Meteor.Error("not-authorized");
+
+    const tasks = await TasksCollection.find({
+      $or: [
+        { userId: this.userId },
+        { isPrivate: { $ne: true } }
+      ]
+    }).fetch();
+
+    const total = tasks.length;
+    const concluidas = tasks.filter(t => t.status === "Concluída").length;
+    const pendentes = tasks.filter(t =>
+      t.status === "Cadastrada" || t.status === "Em Andamento"
+    ).length;
+
+    return { total, concluidas, pendentes };
+  }
+
 });
