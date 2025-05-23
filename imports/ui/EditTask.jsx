@@ -2,9 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTracker } from "meteor/react-meteor-data";
 import { TasksCollection } from "/imports/api/TasksCollection";
-import { Box, Typography, TextField, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+} from "@mui/material";
 import { Meteor } from "meteor/meteor";
-import "/client/EditTask.css";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import ptBR from "date-fns/locale/pt-BR";
 
 export const EditTask = () => {
   const { id } = useParams();
@@ -20,20 +29,14 @@ export const EditTask = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-
-  const [originalName, setOriginalName] = useState("");
-  const [originalDescription, setOriginalDescription] = useState("");
-  const [originalStatus, setOriginalStatus] = useState("");
+  const [date, setDate] = useState(null);
 
   useEffect(() => {
     if (task) {
       setName(task.text || "");
       setDescription(task.description || "");
       setStatus(task.status || "Cadastrada");
-
-      setOriginalName(task.text || "");
-      setOriginalDescription(task.description || "");
-      setOriginalStatus(task.status || "Cadastrada");
+      setDate(task.createdAt ? new Date(task.createdAt) : new Date());
     }
   }, [task]);
 
@@ -55,6 +58,7 @@ export const EditTask = () => {
       name,
       description,
       status,
+      createdAt: date,
     }, (err) => {
       if (err) {
         alert(err.reason || "Erro ao salvar alterações.");
@@ -66,9 +70,6 @@ export const EditTask = () => {
   };
 
   const cancelChanges = () => {
-    setName(originalName);
-    setDescription(originalDescription);
-    setStatus(originalStatus);
     navigate("/tasks");
   };
 
@@ -76,60 +77,73 @@ export const EditTask = () => {
     setStatus(newStatus);
   };
 
-  const getUserName = (userId) => {
-    const user = Meteor.users.findOne(userId);
-    return user?.username || "Usuário Desconhecido";
-  };
-
-  const formatDate = (date) => {
-    if (!date) return "Data não disponível";
-    return new Date(date).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   if (!task) return <p>Carregando tarefa...</p>;
 
   return (
-    <Box className="edit-task-container" sx={{ maxWidth: 600, margin: "auto", p: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Editar Tarefa
+    <Box sx={{ maxWidth: 500, margin: "auto", mt: 4, p: 2 }}>
+      <Typography variant="h6" align="center" gutterBottom>
+        Editar tarefa: <strong>{task.text}</strong>
       </Typography>
 
-      <TextField
-        label="Nome"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Descrição"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        fullWidth
-        margin="normal"
-        multiline
-        rows={4}
-      />
+      <Paper variant="outlined" sx={{ backgroundColor: "#ccc", p: 1, mb: 2 }}>
+        <Typography variant="caption">Nome</Typography>
+        <TextField
+          variant="standard"
+          fullWidth
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          InputProps={{
+            disableUnderline: true,
+            sx: { backgroundColor: "#ccc" },
+          }}
+        />
+      </Paper>
 
-      <Typography variant="body2" gutterBottom>
-        Status: {status}
-      </Typography>
-      <Typography variant="body2" gutterBottom>
-        Data de criação: {formatDate(task.createdAt)}
-      </Typography>
-      <Typography variant="caption" display="block" gutterBottom>
-        Criado por: {getUserName(task.userId)}
-      </Typography>
+      <Paper variant="outlined" sx={{ backgroundColor: "#ccc", p: 1, mb: 2 }}>
+        <Typography variant="caption">Descrição</Typography>
+        <TextField
+          variant="standard"
+          fullWidth
+          multiline
+          rows={3}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          InputProps={{
+            disableUnderline: true,
+            sx: { backgroundColor: "#ccc" },
+          }}
+        />
+      </Paper>
 
-      <Box mt={2} display="flex" gap={1} flexWrap="wrap">
-        <Button variant="contained" onClick={saveChanges}>
-          Salvar
+      <Paper variant="outlined" sx={{ backgroundColor: "#ccc", p: 1, mb: 2 }}>
+        <Typography variant="caption">Data</Typography>
+        <LocalizationProvider dateAdapter={AdapterDateFns} 
+          // @ts-ignore
+          adapterLocale={ptBR}>
+          <DateTimePicker
+            value={date}
+            onChange={(newValue) => setDate(newValue)}
+            slotProps={{
+              textField: {
+                variant: "standard",
+                fullWidth: true,
+                InputProps: {
+                  disableUnderline: true,
+                  sx: { backgroundColor: "#ccc" },
+                },
+              },
+            }}
+          />
+        </LocalizationProvider>
+      </Paper>
+
+      <Box display="flex" justifyContent="center" gap={1} flexWrap="wrap" mb={3}>
+        <Button
+          variant="outlined"
+          onClick={() => handleStatusChange("Cadastrada")}
+          disabled={status === "Cadastrada"}
+        >
+          Cadastrada
         </Button>
         <Button
           variant="outlined"
@@ -145,15 +159,14 @@ export const EditTask = () => {
         >
           Concluir
         </Button>
-        <Button
-          variant="outlined"
-          onClick={() => handleStatusChange("Cadastrada")}
-          disabled={status === "Cadastrada"}
-        >
-          Voltar para Cadastrada
-        </Button>
-        <Button variant="text" onClick={cancelChanges}>
+      </Box>
+
+      <Box display="flex" justifyContent="center" gap={2}>
+        <Button variant="outlined" onClick={cancelChanges}>
           Cancelar
+        </Button>
+        <Button variant="contained" onClick={saveChanges}>
+          Salvar
         </Button>
       </Box>
     </Box>

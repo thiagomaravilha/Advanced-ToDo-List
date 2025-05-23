@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Select, MenuItem, InputLabel, FormControl, Avatar, Stack } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Avatar,
+  Box,
+  Paper,
+} from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import ptBR from 'date-fns/locale/pt-BR';
 import { Meteor } from 'meteor/meteor';
 import { useNavigate } from 'react-router-dom';
-import ptBR from 'date-fns/locale/pt-BR';
-import '/client/user-profile.css';
 
 const sexes = [
   { value: 'male', label: 'Masculino' },
@@ -45,70 +54,133 @@ export default function UserProfile() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (upload) => {
-      
       // @ts-ignore
       setValues({ ...values, photo: upload.target.result });
     };
     reader.readAsDataURL(file);
   };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        Meteor.call('userProfile.update', values, (err) => {
-            if (!err) {
-                alert('Perfil atualizado!');
-                navigate("/welcome");
-            }
-            else alert('Erro ao atualizar perfil');
-        });
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    Meteor.call('userProfile.update', values, (err) => {
+      if (!err) {
+        alert('Perfil atualizado!');
+        navigate("/welcome");
+      } else {
+        alert('Erro ao atualizar perfil');
+      }
+    });
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="user-profile-form">
-      <Stack spacing={2} alignItems="center" sx={{ maxWidth: 400, margin: 'auto', mt: 4 }}>
-        <Avatar src={values.photo} sx={{ width: 100, height: 100 }} />
-        <Button variant="contained" component="label">
-          Upload Foto
-          <input type="file" accept="image/*" hidden onChange={handlePhotoChange} />
-        </Button>
-        <TextField label="Nome" value={values.name} onChange={handleChange('name')} fullWidth />
-        <TextField label="Email" value={values.email} onChange={handleChange('email')} fullWidth />
-
-        <LocalizationProvider
-          dateAdapter={AdapterDateFns}
-          // @ts-ignore
-          adapterLocale={ptBR}
-        >
-          <DatePicker
-            label="Data de Nascimento"
-            value={values.birthdate}
-            onChange={handleDateChange}
-            // @ts-ignore
-            renderInput={(params) => <TextField {...params} fullWidth />}
-          />
-        </LocalizationProvider>
-
-        <FormControl fullWidth>
-          <InputLabel>Sexo</InputLabel>
-          <Select value={values.sex} label="Sexo" onChange={handleChange('sex')}>
-            {sexes.map((s) => (
-              <MenuItem key={s.value} value={s.value}>{s.label}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <TextField label="Empresa" value={values.company} onChange={handleChange('company')} fullWidth />
-
+    <form onSubmit={handleSubmit}>
+      <Box sx={{ maxWidth: 450, mx: "auto", mt: 4, p: 2, position: "relative" }}>
         
-        <div className="form-buttons">
-          <Button variant="outlined" onClick={() => navigate("/welcome")}>
-            Voltar
+        <Box sx={{ position: "absolute", right: -100, top: 0 }}>
+          <Avatar
+            src={values.photo}
+            sx={{ width: 80, height: 80, bgcolor: "#ccc", fontSize: 12 }}
+          >
+            {!values.photo ? "Foto" : ""}
+          </Avatar>
+          <Button variant="contained" component="label" sx={{ mt: 1 }}>
+            Upload
+            <input type="file" accept="image/*" hidden onChange={handlePhotoChange} />
           </Button>
-          <Button type="submit" variant="contained" color="primary">
+        </Box>
+
+        <Paper sx={{ backgroundColor: "#ccc", p: 1, mb: 2 }} variant="outlined">
+          <TextField
+            label="Nome"
+            variant="standard"
+            fullWidth
+            value={values.name}
+            onChange={handleChange('name')}
+            InputProps={{
+              disableUnderline: true,
+              sx: { backgroundColor: "#ccc" },
+            }}
+          />
+        </Paper>
+
+        <Paper sx={{ backgroundColor: "#ccc", p: 1, mb: 2 }} variant="outlined">
+          <TextField
+            label="e-mail"
+            variant="standard"
+            fullWidth
+            value={values.email}
+            onChange={handleChange('email')}
+            InputProps={{
+              disableUnderline: true,
+              sx: { backgroundColor: "#ccc" },
+            }}
+          />
+        </Paper>
+
+        <Paper sx={{ backgroundColor: "#ccc", p: 1, mb: 2 }} variant="outlined">
+          <LocalizationProvider dateAdapter={AdapterDateFns} 
+            // @ts-ignore
+            adapterLocale={ptBR}>
+            <DatePicker
+              label="Data de nascimento"
+              value={values.birthdate}
+              onChange={handleDateChange}
+              slotProps={{
+                textField: {
+                  variant: "standard",
+                  fullWidth: true,
+                  InputProps: {
+                    disableUnderline: true,
+                    sx: { backgroundColor: "#ccc" },
+                  },
+                },
+              }}
+            />
+          </LocalizationProvider>
+        </Paper>
+
+        <Paper sx={{ backgroundColor: "#ccc", p: 1, mb: 2 }} variant="outlined">
+          <FormControl fullWidth variant="standard">
+            <InputLabel id="sexo-label">Sexo</InputLabel>
+            <Select
+              labelId="sexo-label"
+              value={values.sex}
+              onChange={handleChange('sex')}
+              disableUnderline
+              sx={{ backgroundColor: "#ccc" }}
+            >
+              {sexes.map((s) => (
+                <MenuItem key={s.value} value={s.value}>
+                  {s.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Paper>
+
+        <Paper sx={{ backgroundColor: "#ccc", p: 1, mb: 3 }} variant="outlined">
+          <TextField
+            label="Empresa"
+            variant="standard"
+            fullWidth
+            value={values.company}
+            onChange={handleChange('company')}
+            InputProps={{
+              disableUnderline: true,
+              sx: { backgroundColor: "#ccc" },
+            }}
+          />
+        </Paper>
+
+        <Box display="flex" justifyContent="center" gap={2}>
+          <Button variant="outlined" onClick={() => navigate("/welcome")}>
+            Cancelar
+          </Button>
+          <Button type="submit" variant="contained">
             Salvar
           </Button>
-        </div>
-      </Stack>
+        </Box>
+      </Box>
     </form>
   );
 }

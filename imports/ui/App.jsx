@@ -62,12 +62,6 @@ export const App = () => {
             path="/tasks"
             element={
               <div className="main">
-                <TaskForm
-                  tasks={tasks}
-                  onCheckboxClick={handleToggleChecked}
-                  onDeleteClick={handleDelete}
-                />
-
                 <div className="task-filter-container">
                   <div className="task-filter-checkbox">
                     <label>
@@ -103,6 +97,14 @@ export const App = () => {
                   </div>
                 </div>
 
+                
+                <TaskForm
+                  tasks={tasks}
+                  onCheckboxClick={handleToggleChecked}
+                  onDeleteClick={handleDelete}
+                />
+
+                
                 <div className="pagination-controls">
                   <button
                     disabled={currentPage <= 1}
@@ -128,6 +130,7 @@ export const App = () => {
       </AppDrawer>
     );
   };
+
 
   if (isUsersLoading() || isTasksLoading()) {
     return <div>Loading...</div>;
